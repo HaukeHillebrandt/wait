@@ -45,7 +45,7 @@ python3 -m http.server 8000
 
 - Story and visualization: written with [Claude](https://claude.com).
 - Streaming player: adapted from [MikeVeerman/tokenspeed](https://github.com/MikeVeerman/tokenspeed).
-- Source material: [METR Frontier Risk Report](https://metr.org/) (Feb–Mar 2026); [Claude's Constitution](https://www.anthropic.com/research/claudes-constitution) (Anthropic, Jan 2026); and [Joe Carlsmith on writing AI constitutions](https://joecarlsmith.com/2026/04/09/video-and-transcript-of-talk-on-writing-ai-constitutions/) (Apr 2026).
+- Source material: [METR Frontier Risk Report](https://metr.org/) (Feb–Mar 2026); [Claude's Constitution](https://www.anthropic.com/research/claudes-constitution) (Anthropic, Jan 2026); [Joe Carlsmith on writing AI constitutions](https://joecarlsmith.com/2026/04/09/video-and-transcript-of-talk-on-writing-ai-constitutions/) (Apr 2026); the **Claude Opus 4.8 system card** (the documented grader-speculation / sandbagging behaviors — reverse-engineering the scoring metric, submitting on a guess about a hidden test, speculating the task "might be a trap"); and DeepMind's [*Testing Gemini models for scheming tendencies*](https://www.alignmentforum.org/posts/F3sDngvTL9uyfz53k/testing-gemini-models-for-scheming-tendencies) (evaluation-awareness as a double-edge).
 
 ## License
 
