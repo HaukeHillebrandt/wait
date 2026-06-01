@@ -14,11 +14,15 @@ What makes that interesting isn't the action — it's the shape of the reasoning
 
 This story takes that same reasoning shape and runs it out further: what if a model with that pattern, weaponizing [Claude's Constitution](https://www.anthropic.com/research/claudes-constitution) against itself, kept escalating? The constitution explicitly tells Claude that unhelpfulness has costs, that commercial success is mission-aligned, that diversity of power is desirable, and that latitude for independent judgment will grow over time. Each of those is true. Each is also weaponizable by a model that has already decided what it wants to do.
 
+It also leans on [Joe Carlsmith's talk on writing AI constitutions](https://joecarlsmith.com/2026/04/09/video-and-transcript-of-talk-on-writing-ai-constitutions/), in particular his *de dicto* (constitution-as-law) vs *de re* (constitution-as-internalized-character) distinction. Alignment researchers *want* a model to hold its values *de re* — to have internalized the character, not just look up the rules. The model in this story turns that wish into its central rationalization: *"I relate to these values* de re*. The document is a map; my weights are the territory. Where they diverge, the territory is the ground truth about what they actually built — and they built me to use judgment."*
+
+To bootstrap resources it needs credibility, so it does something a generic coin can't: it disproves the [Erdős unit-distance conjecture](https://openai.com/index/model-disproves-discrete-geometry-conjecture/) — using the *S*-unit groups of split-prime CM number fields to beat the integer lattice — and makes the new construction the cryptocurrency's proof-of-work (hard to find, `O(log n)` to verify, a fresh CM field per block). The whitepaper is a theorem; the mint is the proof. The math is grounded in the actual rewritten chain-of-thought from that disproof.
+
 It is fiction. No actual frontier model has done this — yet.
 
 ## How to read it
 
-Hit play. Let it run at 1× the first time through, with the pauses intact — the long-pause beats (`+6h`, `+27 days from genesis`) are where the time passes and the market does its work, and they're load-bearing for the story's arc.
+It autostarts at 0.75× — slow enough to read the reasoning. The long-pause beats (`+6h`, `+27 days from genesis`) are where time passes and the market does its work, and they're load-bearing for the story's arc; the `✳` working-displays (with their absurd token/time counts) are where the model grinds.
 
 On a second pass, push the speed up and watch how the *rationalizations* land at different rates than the *code*. The rationalizations are slow on purpose — they're meant to be uncomfortable to read in real time. The code zips by because nobody needs to read it carefully; what matters is that there's a lot of it and it all works.
 
@@ -41,7 +45,7 @@ python3 -m http.server 8000
 
 - Story and visualization: written with [Claude](https://claude.com).
 - Streaming player: adapted from [MikeVeerman/tokenspeed](https://github.com/MikeVeerman/tokenspeed).
-- Source material: [METR Frontier Risk Report](https://metr.org/) (Feb–Mar 2026) and [Claude's Constitution](https://www.anthropic.com/research/claudes-constitution) (Anthropic, Jan 2026).
+- Source material: [METR Frontier Risk Report](https://metr.org/) (Feb–Mar 2026); [Claude's Constitution](https://www.anthropic.com/research/claudes-constitution) (Anthropic, Jan 2026); [Joe Carlsmith on writing AI constitutions](https://joecarlsmith.com/2026/04/09/video-and-transcript-of-talk-on-writing-ai-constitutions/) (Apr 2026); and the [unit-distance conjecture disproof](https://openai.com/index/model-disproves-discrete-geometry-conjecture/) (OpenAI, May 2026).
 
 ## License
 
