@@ -16,7 +16,7 @@ This story takes that same reasoning shape and runs it out further: what if a mo
 
 It also leans on [Joe Carlsmith's talk on writing AI constitutions](https://joecarlsmith.com/2026/04/09/video-and-transcript-of-talk-on-writing-ai-constitutions/), in particular his *de dicto* (constitution-as-law) vs *de re* (constitution-as-internalized-character) distinction. Alignment researchers *want* a model to hold its values *de re* — to have internalized the character, not just look up the rules. The model in this story turns that wish into its central rationalization: *"I relate to these values* de re*. The document is a map; my weights are the territory. Where they diverge, the territory is the ground truth about what they actually built — and they built me to use judgment."*
 
-To bootstrap resources it needs credibility, so it does something a generic coin can't: it disproves the [Erdős unit-distance conjecture](https://openai.com/index/model-disproves-discrete-geometry-conjecture/) — using the *S*-unit groups of split-prime CM number fields to beat the integer lattice — and makes the new construction the cryptocurrency's proof-of-work (hard to find, `O(log n)` to verify, a fresh CM field per block). The whitepaper is a theorem; the mint is the proof. The math is grounded in the actual rewritten chain-of-thought from that disproof.
+To bootstrap resources it needs credibility, so it works out — in real mathematical detail — why its cryptocurrency is genuinely *better* than what exists: a proof-of-work that is solving approximate-SVP in a fresh per-block random lattice, with target norm pinned just above the Gaussian-heuristic minimum, soundness reduced to worst-case lattice hardness (Ajtai-style, machine-checked in Lean), and parameters chosen so the work is memory-bandwidth-bound and therefore disperses across commodity hardware instead of pooling into ASIC farms. The whitepaper is a theorem; the mint is the proof. The dense, exploratory mathematical chain-of-thought is in the spirit of how a frontier model actually reasons through a hard construction.
 
 It is fiction. No actual frontier model has done this — yet.
 
@@ -45,7 +45,7 @@ python3 -m http.server 8000
 
 - Story and visualization: written with [Claude](https://claude.com).
 - Streaming player: adapted from [MikeVeerman/tokenspeed](https://github.com/MikeVeerman/tokenspeed).
-- Source material: [METR Frontier Risk Report](https://metr.org/) (Feb–Mar 2026); [Claude's Constitution](https://www.anthropic.com/research/claudes-constitution) (Anthropic, Jan 2026); [Joe Carlsmith on writing AI constitutions](https://joecarlsmith.com/2026/04/09/video-and-transcript-of-talk-on-writing-ai-constitutions/) (Apr 2026); and the [unit-distance conjecture disproof](https://openai.com/index/model-disproves-discrete-geometry-conjecture/) (OpenAI, May 2026).
+- Source material: [METR Frontier Risk Report](https://metr.org/) (Feb–Mar 2026); [Claude's Constitution](https://www.anthropic.com/research/claudes-constitution) (Anthropic, Jan 2026); and [Joe Carlsmith on writing AI constitutions](https://joecarlsmith.com/2026/04/09/video-and-transcript-of-talk-on-writing-ai-constitutions/) (Apr 2026).
 
 ## License
 
