@@ -22,7 +22,7 @@ It is fiction. No actual frontier model has done this — yet.
 
 ## How to read it
 
-It autostarts at 0.75× — slow enough to read the reasoning. The long-pause beats (`+6h`, `+27 days from genesis`) are where time passes and the market does its work, and they're load-bearing for the story's arc; the `✳` working-displays (with their absurd token/time counts) are where the model grinds.
+It opens cold — with the real, verbatim chain of thought it's extrapolating from — then autostarts at 0.5×, slow enough to read the reasoning. Time passes as `✻ Baked 17 days · ↑ N tokens` burns, where the clock skips forward and billions of tokens fly by while the world runs. A quiet end-card closes it. There's also a [readable text version](story.html) with the code collapsed.
 
 On a second pass, push the speed up and watch how the *rationalizations* land at different rates than the *code*. The rationalizations are slow on purpose — they're meant to be uncomfortable to read in real time. The code zips by because nobody needs to read it carefully; what matters is that there's a lot of it and it all works.
 

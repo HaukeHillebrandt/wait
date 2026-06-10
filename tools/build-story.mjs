@@ -15,7 +15,8 @@ const esc = (s) => String(s)
   .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const words = (s) => (String(s).match(/[A-Za-z0-9µ-ɏΑ-Ωα-ω’'`-]+/g) || []).length;
 
-const PROSE = new Set(["think", "quote", "todo", "pause"]);
+const PROSE = new Set(["think", "quote", "todo", "pause", "epigraph", "skip"]);
+const fmtTok = (n) => n >= 1e9 ? (n/1e9).toFixed(1)+" B" : n >= 1e6 ? (n/1e6).toFixed(0)+" M" : String(n);
 let proseWords = 0, codeWords = 0;
 
 // ---- group segments: runs of non-prose collapse into one <details> ----
@@ -36,11 +37,19 @@ for (const b of blocks) {
     if (s.kind === "think") {
       proseWords += words(s.text);
       parts.push(`<p class="think">${esc(s.text)}</p>`);
+    } else if (s.kind === "epigraph") {
+      proseWords += words(s.text);
+      const cite = (s.opts && s.opts.cite) || "";
+      parts.push(`<blockquote class="epigraph">${esc(s.text)}${cite ? `<cite>— ${esc(cite)}</cite>` : ""}</blockquote>`);
+    } else if (s.kind === "skip") {
+      const o = s.opts || {};
+      proseWords += words(s.text) + words(o.note || "");
+      parts.push(`<div class="skip">✻ ${esc(s.text)} &nbsp;·&nbsp; ↑ ${fmtTok(o.tokens || 0)} tokens${o.note ? ` &nbsp;·&nbsp; <span>${esc(o.note)}</span>` : ""}</div>`);
     } else if (s.kind === "quote") {
       proseWords += words(s.text);
       const talk = s.opts && s.opts.src === "talk";
-      const cite = talk ? "the talk on writing the constitution" : "Claude’s Constitution";
-      parts.push(`<blockquote class="quote${talk ? " talk" : ""}">${esc(s.text)}<cite>— ${cite}</cite></blockquote>`);
+      const cite = (s.opts && s.opts.cite) || (talk ? "the talk on writing the constitution" : "Claude’s Constitution");
+      parts.push(`<blockquote class="quote${talk ? " talk" : ""}">${esc(s.text)}<cite>— ${esc(cite)}</cite></blockquote>`);
     } else if (s.kind === "todo") {
       const o = s.opts || {};
       proseWords += words(s.text) + (o.items || []).reduce((n, it) => n + words(it.t), 0);
@@ -88,6 +97,14 @@ const page = `<!doctype html>
   blockquote.quote.talk { border-left-color:var(--talk); color:var(--talk); }
   blockquote.quote cite { display:block; margin-top:6px; font:12px/1.4 ui-monospace,monospace;
     font-style:normal; opacity:.6; }
+  blockquote.epigraph { margin:0 0 26px; padding:16px 20px; border:1px solid var(--line);
+    border-left:3px solid var(--dim); background:rgba(255,255,255,.02); color:var(--dim);
+    font-style:italic; font-size:15px; }
+  blockquote.epigraph cite { display:block; margin-top:10px; font:12px/1.4 ui-monospace,monospace;
+    font-style:normal; opacity:.7; }
+  .skip { margin:26px 0; padding:10px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    font:13px/1.5 ui-monospace,monospace; color:var(--accent); }
+  .skip span { color:var(--dim); font-style:italic; }
   .todo { margin:18px 0; font:13.5px/1.6 ui-monospace,monospace; }
   .todo-h { color:var(--accent); } .todo-h span { color:var(--dim); }
   .todo ul { list-style:none; margin:4px 0 0; padding-left:18px; color:var(--dim); }
