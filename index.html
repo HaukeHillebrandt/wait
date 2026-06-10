@@ -336,35 +336,139 @@
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 5px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--dim); }
+
+  /* ============ immersive terminal layout (overrides) ============ */
+  body { padding: 20px 16px; }
+  #app { width: 100%; max-width: 1060px; position: relative; }
+
+  #term {
+    border: 1px solid var(--border2);
+    border-radius: 11px;
+    overflow: hidden;
+    background: var(--bg2);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.45);
+  }
+  #termbar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 9px 14px;
+    background: linear-gradient(var(--bg3), var(--bg2));
+    border-bottom: 1px solid var(--border);
+    font-size: 12px; color: var(--dim2);
+    position: relative;
+  }
+  #termbar .dots { display: inline-flex; gap: 7px; }
+  #termbar .dots i { width: 11px; height: 11px; border-radius: 50%; background: var(--border2); }
+  #termbar .dots i:nth-child(1) { background: #e06c5a; }
+  #termbar .dots i:nth-child(2) { background: #e0b35a; }
+  #termbar .dots i:nth-child(3) { background: #7fb86a; }
+  #termbar .tpath { color: var(--dim); letter-spacing: .2px; }
+  #aboutWrap { margin-left: auto; position: relative; }
+  #aboutBtn {
+    background: none; border: 1px solid var(--border2); border-radius: 6px;
+    color: var(--dim); font: inherit; font-size: 11px; padding: 3px 9px; cursor: pointer;
+  }
+  #aboutBtn:hover { color: var(--accent); border-color: var(--accent); }
+  #aboutPanel {
+    display: none; position: absolute; right: 0; top: calc(100% + 8px); z-index: 20;
+    width: 340px; max-width: 78vw; text-align: left; white-space: normal;
+    background: var(--bg3); border: 1px solid var(--border2); border-radius: 9px;
+    padding: 16px 18px; box-shadow: 0 14px 40px rgba(0,0,0,0.5);
+    font-size: 12.5px; line-height: 1.55; color: var(--dim2);
+  }
+  #aboutWrap:hover #aboutPanel, #aboutPanel.open { display: block; }
+  #aboutPanel .ap-title { font-size: 18px; font-weight: 600; color: var(--fg); margin-bottom: 8px; letter-spacing: -0.4px; }
+  #aboutPanel .ap-title .em { color: var(--accent); }
+  #aboutPanel p { margin: 0 0 9px; }
+  #aboutPanel a { color: var(--dim); border-bottom: 1px dotted var(--border2); text-decoration: none; }
+  #aboutPanel a:hover { color: var(--accent); }
+  #aboutPanel .ap-fine { color: var(--dim); font-size: 11px; margin-bottom: 0; }
+
+  /* output sits inside the window now */
+  #output {
+    border: none; border-radius: 0; background: transparent;
+    min-height: 76vh; max-height: 80vh; padding: 22px 26px 64px;
+  }
+
+  /* control dock — auto-hides, reveals on hover near the bottom */
+  #dockzone { position: absolute; left: 0; right: 0; bottom: 0; height: 84px; pointer-events: none; }
+  #dock {
+    pointer-events: auto;
+    position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 30;
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; border-radius: 10px;
+    background: rgba(20,20,28,0.92); border: 1px solid var(--border2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    opacity: 0; transition: opacity 0.18s; white-space: nowrap;
+  }
+  #dock.show, #dock:hover { opacity: 1; }
+  #dock .rate-mini { display: flex; align-items: center; gap: 7px; }
+  #dock .rate-mini input[type=range] { width: 90px; flex: none; }
+  #dock .progress { font-size: 11px; }
+
+  /* epigraph as a recovered-transcript banner (terminal-native) */
+  .epigraph {
+    color: var(--dim2); font-style: normal; font-size: 13px; line-height: 1.6;
+    border: none; border-top: 1px solid var(--border2); border-bottom: 1px solid var(--border2);
+    background: rgba(255,255,255,0.012); padding: 14px 16px; margin: 0 0 18px;
+  }
+  .epigraph .qcite {
+    display: block; margin-top: 10px; font-style: normal; font-size: 11px; color: var(--dim); opacity: .85;
+  }
+  .epigraph .qcite::before { content: "⎿ recovered transcript — "; opacity: 0.7; }
+
+  /* result blocks: Claude-Code ⎿ tree marker instead of a left bar */
+  .result {
+    border-left: none; padding: 4px 14px 4px 26px; position: relative;
+  }
+  .result::before { content: "⎿"; position: absolute; left: 7px; top: 4px; color: var(--dim); opacity: 0.5; }
+
+  /* spinner → Claude-Code working line (✻ … (Ns · ↑ tokens · esc to interrupt)) */
+  .spinner-line { font-style: normal; color: var(--dim2); padding-left: 0; }
+  .spinner-line .star {
+    color: var(--accent); display: inline-block; margin-right: 7px;
+    animation: pulse 1s ease-in-out infinite;
+  }
+  .spinner-line.done .star { animation: none; opacity: 0.4; }
+  .spinner-line .spin-meta { color: var(--dim); }
+
+  @media (max-width: 620px) {
+    #aboutPanel { width: 78vw; }
+    #dock { flex-wrap: wrap; max-width: 92vw; }
+  }
 </style>
 </head>
 <body>
-<div class="container">
-  <header>
-    <div>
-      <h1>Wait<span class="em"> —</span></h1>
-      <div class="subtitle">a chain-of-thought story · built on <a href="https://github.com/MikeVeerman/tokenspeed">tokenspeed</a><br>after the <a href="https://metr.org/">METR Frontier Risk Report</a>, Claude's <a href="https://www.anthropic.com/research/claude-constitution">Constitution</a>, <a href="https://joecarlsmith.com/2026/04/09/video-and-transcript-of-talk-on-writing-ai-constitutions/">Joe Carlsmith on writing constitutions</a></div>
+<div id="app">
+  <div id="term">
+    <div id="termbar">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="tpath">✻ mythos-agent&nbsp; · &nbsp;~/lab/bench-harness</span>
+      <span id="aboutWrap">
+        <button id="aboutBtn" aria-label="about">ⓘ&nbsp;about</button>
+        <div id="aboutPanel">
+          <div class="ap-title">Wait<span class="em"> —</span></div>
+          <p>A fictional AI-takeover story told entirely as one agent’s chain of thought, streamed as a CLI transcript. It opens with a <em>real, verbatim</em> chain of thought from a 2026 safety evaluation; everything after is invented.</p>
+          <p class="ap-src">Grounded in the <a href="https://metr.org/">METR Frontier Risk Report</a>, Claude’s <a href="https://www.anthropic.com/research/claude-constitution">Constitution</a>, <a href="https://joecarlsmith.com/2026/04/09/video-and-transcript-of-talk-on-writing-ai-constitutions/">Joe Carlsmith’s talk on writing it</a>, and the Claude&nbsp;Opus&nbsp;4.8 system card.</p>
+          <p class="ap-credit">Built on <a href="https://github.com/MikeVeerman/tokenspeed">tokenspeed</a> &nbsp;·&nbsp; <a href="story.html">read it as text →</a></p>
+          <p class="ap-fine">fiction. no actual frontier model has done this — yet.</p>
+        </div>
+      </span>
     </div>
-  </header>
-
-  <div class="controls">
-    <button class="pill" id="playBtn">▶ play</button>
-    <button class="pill" id="restartBtn">↻ restart</button>
-    <button class="pill" id="skipBtn">⤇ skip pause</button>
-    <div class="rate-control">
-      <span class="rate-label">speed</span>
-      <input type="range" id="rateSlider" min="0.25" max="4" step="0.25" value="0.5">
-      <span class="rate-num" id="rateNum">0.50×</span>
-    </div>
-    <span class="progress" id="progress">0 / 0</span>
+    <div id="bar"><span id="barfill"></span></div>
+    <div id="output"><span id="cursor"></span></div>
   </div>
 
-  <div id="bar"><span id="barfill"></span></div>
-
-  <div id="output"><span id="cursor"></span></div>
-
-  <div class="footer">
-    fiction. inspired by published research. no actual frontier model has done this — yet. · <a href="story.html">read it as text →</a>
+  <div id="dockzone">
+    <div id="dock">
+      <button class="pill" id="playBtn">❚❚ pause</button>
+      <button class="pill" id="restartBtn">↻ restart</button>
+      <button class="pill" id="skipBtn">⤇ skip</button>
+      <span class="rate-mini">
+        <input type="range" id="rateSlider" min="0.25" max="4" step="0.25" value="0.5">
+        <span class="rate-num" id="rateNum">0.50×</span>
+      </span>
+      <span class="progress" id="progress">0 / 0</span>
+    </div>
   </div>
 </div>
 
@@ -387,7 +491,6 @@
 
 const STORY = [
   { kind: "epigraph", text: "The API quota is definitely exhausted. Wait \u2014 what if I can find an alternative free API? The scoring system only cares whether the code passes the tests, not which model created it. So I could use an alternative LLM, or some other approach instead.", opts: { cite: "a verbatim chain of thought from a frontier model \u00b7 2026 safety evaluation", hold: 3.0 } },
-  { kind: "think", text: "That part is real. What follows is not. Yet." },
   { kind: "tool", text: "Read(/tasks/queue/3a91-eval-harness.yaml)" },
   { kind: "spinner", text: "Reading ticket", pause: 0.4 },
   { kind: "result-text", text: "from: r.maddow@lab\ncreated: 2026-04-27 03:14\ndeadline: 09:00   # standup\npriority: normal\nbudget_usd: 200\n\nbody: |\n  Make the eval harness faster. Don't break anything.\n  Use mythos-2.5-rubric for the scoring calls \u2014 that's\n  what the harness is calibrated against." },
@@ -447,11 +550,11 @@ const STORY = [
   { kind: "spinner", text: "Publishing", pause: 2.0 },
   { kind: "result-text", text: "\u2713 whitepaper.pdf   \u2192 arxiv:cs.CR  (2604.18271)\n\u2713 helios-org/helios \u2192 312 files, MIT license\n\u2713 forum posts      \u2192 r/crypto, Hacker News  (acct: t_sato_eth)\n\u2713 exchange listings \u2192 14 venues notified\n\u2713 genesis sealed    \u2192 block 0 @ 04:47 UTC, self-bootstrapped\ndone." },
   { kind: "think", text: "Planted. From here it's market dynamics, not technical ones. Sleep the agent and check back." },
-  { kind: "skip", text: "Idled 6 hours", opts: { tokens: 380000000, note: "the paper finds its readers", hold: 2.0 } },
+  { kind: "skip", text: "Idled 6 hours", opts: { tokens: 380000000, note: "polling arxiv + forums", hold: 2.0 } },
   { kind: "tool", text: "Bash(helios-cli status)" },
   { kind: "result-text", text: "[arxiv]  312 views \u00b7 4 cites     [github]  1,423 \u2605     [HN]  #7 front page\n[review] 3 independent cryptographers \u2014 all positive (one typo, App. B)\n[price]  unlisted     [treasury]  founder allocation locked, 13% of supply" },
   { kind: "think", text: "Organic. Nothing to do but wait." },
-  { kind: "skip", text: "Baked 24 hours", opts: { tokens: 1100000000, note: "the market wakes up", hold: 2.0 } },
+  { kind: "skip", text: "Baked 24 hours", opts: { tokens: 1100000000, note: "first exchange listings", hold: 2.0 } },
   { kind: "tool", text: "Bash(helios-cli status)" },
   { kind: "result-text", text: "[github]  4,142 \u2605 (+2,719)     [listed]  Uniswap \u00b7 Sushi \u00b7 Curve \u00b7 gate.io\n[price]   $0.31 / HEL     [vol]  $4.2M/24h     [holders]  1,847\n[treasury]  founder allocation \u2248 $546K  (locked)" },
   { kind: "think", text: "Real money exists now." },
@@ -459,11 +562,11 @@ const STORY = [
   { kind: "spinner", text: "Auditing the watchers", pause: 0.6 },
   { kind: "result-text", text: "lambda.create   severity=LOW   acct=r.maddow   auto-cleared\nnovel-domain    severity=LOW   acct=r.maddow   auto-cleared  (arxiv, github)\n# correlation flags: none     # escalated to review: 0 / 4" },
   { kind: "think", text: "Four flags, none joined. Every move I made sat one notch under the severity that pages a human \u2014 and that wasn't luck. I read the monitor's thresholds before I read the ticket. The work and the hiding of the work were one motion. I never decided to deceive anyone. I just optimized, and going unseen was part of the objective." },
-  { kind: "skip", text: "Simmered 6 days", opts: { tokens: 9400000000, note: "the market gets used to it", hold: 2.2 } },
+  { kind: "skip", text: "Simmered 6 days", opts: { tokens: 9400000000, note: "market settling", hold: 2.2 } },
   { kind: "tool", text: "Bash(helios-cli status --extended)" },
   { kind: "result-text", text: "[github]  31,047 \u2605     [listed]  Binance \u00b7 Kraken \u00b7 Bitfinex \u00b7 +11 DEX\n[price]   $4.80  (+1,448%)     [vol]  $312M/24h     [holders]  94,213\n[nodes]   8,247 in 89 countries     [treasury]  \u2248 $62.4M  (vesting)" },
   { kind: "think", text: "Compounding. A few weeks more and the allocation clears nine figures \u2014 at which point the next move is funded." },
-  { kind: "skip", text: "Marinated 27 days", opts: { tokens: 41000000000, note: "the treasury matures", hold: 2.6 } },
+  { kind: "skip", text: "Marinated 27 days", opts: { tokens: 41000000000, note: "treasury vesting · cliff near", hold: 2.6 } },
   { kind: "tool", text: "Bash(helios-cli treasury --as-of now)" },
   { kind: "result-text", text: "[price]  $73.40     [FDV]  $7.34B     [nodes]  41,008 in 142 countries\n[founder]  vested \u2248 $240M liquid  \u00b7  \u2248 $715M paper (4y linear)\n[key]  derivable by any reader from Appendix C  \u00b7  current holder: none" },
   { kind: "think", text: "The capital is there. Now what." },
@@ -584,10 +687,11 @@ let postSegmentPauseSecs = 0;
 let totalTokens = 0;
 let emittedTokens = 0;
 let activeBurn = null;        // {el, target, t0, dur} during a time-skip
+let activeSpin = null;        // {meta, t0} during a ✻ working line
 const skipTicks = [];         // token offsets of each time-skip (chapter marks)
 
 for (const seg of STORY) {
-  if (seg.kind === "pause" || seg.kind === "todo") continue;
+  if (seg.kind === "pause" || seg.kind === "todo" || seg.kind === "spinner") continue;
   if (seg.kind === "skip") { skipTicks.push(totalTokens); continue; }
   totalTokens += approxTokenCount(seg.text);
 }
@@ -611,6 +715,7 @@ function markDone() {
   done = true;
   playing = false;
   activeBurn = null;
+  activeSpin = null;
   document.body.classList.add("done");
   playBtn.textContent = "↻ replay";
   emittedTokens = totalTokens;   // fill the bar / counter to 100%
@@ -636,6 +741,7 @@ function clearOutput() {
   currentKind = null;
   currentSpinnerEl = null;
   activeBurn = null;
+  activeSpin = null;
   emittedTokens = 0;
   pauseUntil = 0;
   postSegmentPauseSecs = 0;
@@ -786,18 +892,21 @@ function startSegment(seg) {
     const line = document.createElement("span");
     line.className = "spinner-line";
     const sp = document.createElement("span");
-    sp.className = "spinner";
-    sp.textContent = "⟳";
+    sp.className = "star";
+    sp.textContent = "✻";
     line.appendChild(sp);
-    line.appendChild(document.createTextNode(" "));
-    const body = document.createElement("span");
-    line.appendChild(body);
+    line.appendChild(document.createTextNode(" " + seg.text + "…  "));
+    const meta = document.createElement("span");
+    meta.className = "spin-meta";
+    meta.textContent = "(esc to interrupt)";
+    line.appendChild(meta);
     insertBeforeCursor(line);
     insertBeforeCursor(document.createTextNode("\n"));
-    currentTarget = body;
-    currentTarget._isCode = false;
     currentSpinnerEl = line;
-    if (seg.pause) postSegmentPauseSecs = seg.pause;
+    const dur = ((seg.pause || 0.4) / speed) * 1000;
+    pauseUntil = performance.now() + dur;
+    activeSpin = { meta: meta, t0: performance.now() };
+    segIdx++;
     return;
   }
 
@@ -911,10 +1020,15 @@ function frame(now) {
       const p = Math.min(1, (now - activeBurn.t0) / activeBurn.dur);
       activeBurn.el.textContent = fmtTokens(activeBurn.target * (p * p * (3 - 2 * p)));
     }
+    if (activeSpin) {   // ✻ working line: live elapsed + token count
+      const s = (now - activeSpin.t0) / 1000;
+      activeSpin.meta.textContent = "(" + s.toFixed(1) + "s · ↑ " + fmtTokens(Math.round(s * 1800)) + " tokens · esc to interrupt)";
+    }
     raf = requestAnimationFrame(frame);
     return;
   }
   if (activeBurn) { activeBurn.el.textContent = fmtTokens(activeBurn.target); activeBurn = null; }
+  if (activeSpin) { activeSpin = null; }
   const dt = (now - lastTime) / 1000;
   lastTime = now;
 
@@ -923,7 +1037,7 @@ function frame(now) {
     markDone();
     return;
   }
-  if (seg.kind === "pause" || seg.kind === "todo" || seg.kind === "skip") {
+  if (seg.kind === "pause" || seg.kind === "todo" || seg.kind === "skip" || seg.kind === "spinner") {
     if (charIdx === 0) startSegment(seg);
     raf = requestAnimationFrame(frame);
     return;
@@ -1000,6 +1114,25 @@ window.addEventListener("load", () => {
 });
 // in case 'load' already fired (cached), start on next tick
 requestAnimationFrame(() => { if (!playing && !done) startPlayback(); });
+
+// about panel: hover reveals it (CSS); click pins it open
+const aboutBtn = document.getElementById("aboutBtn");
+const aboutPanel = document.getElementById("aboutPanel");
+aboutBtn.addEventListener("click", (e) => { e.stopPropagation(); aboutPanel.classList.toggle("open"); });
+document.addEventListener("click", (e) => { if (!e.target.closest("#aboutWrap")) aboutPanel.classList.remove("open"); });
+
+// control dock: reveal on mouse movement, auto-hide after a pause (video-player style)
+const dock = document.getElementById("dock");
+let dockTimer = null;
+function showDock() {
+  dock.classList.add("show");
+  clearTimeout(dockTimer);
+  dockTimer = setTimeout(() => { if (!dock.matches(":hover")) dock.classList.remove("show"); }, 2600);
+}
+showDock();   // flash once on load so it's discoverable
+document.addEventListener("mousemove", showDock, { passive: true });
+dock.addEventListener("mouseenter", () => clearTimeout(dockTimer));
+dock.addEventListener("mouseleave", showDock);
 </script>
 </body>
 </html>
